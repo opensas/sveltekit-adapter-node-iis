@@ -1,6 +1,6 @@
 {
   "name": "sveltekit-adapter-node-iis",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Adapter for SvelteKit that generates a Node server for IIS",
   "main": "index.js",
   "type": "module",
