@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+*.tgz
+
+# Environment variables
+.env
+.env.*.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test output (if you add tests)
+coverage/
+test-results/
+
+# Local linked packages
+.yalc/
+yalc.lock
+
+# Package manager specific
+package-lock.json
+yarn.lock
+# but keep pnpm-lock.yaml if you use pnpm
