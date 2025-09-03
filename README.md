@@ -3,7 +3,7 @@
 An adapter for SvelteKit that expands the node-adapter for IIS.
 It is based on [this StackOverflow answer](https://stackoverflow.com/a/76883862).
 
-Forked from (https://github.com/Vuferen/sveltekit-adapter-node-iis)[https://github.com/Vuferen/sveltekit-adapter-node-iis]
+Forked from [Vuferen/sveltekit-adapter-node-iis](https://github.com/Vuferen/sveltekit-adapter-node-iis)
 
 ## Usage
 
