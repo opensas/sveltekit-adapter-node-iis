@@ -63,7 +63,7 @@ export default function (opts = {}) {
         }
       }
 
-      console.info("Finished @opensas/sveltekit-adapter-node-iis");
+      console.info("✅ Finished @opensas/sveltekit-adapter-node-iis");
     },
   };
 }
