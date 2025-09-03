@@ -1,29 +1,65 @@
 {
-	"name": "sveltekit-adapter-node-iis",
-	"version": "0.2.0-opensas",
+	"name": "@opensas/sveltekit-adapter-node-iis",
+	"version": "0.2.0-opensas.1",
 	"description": "Adapter for SvelteKit that generates a Node server for IIS",
-	"main": "index.js",
-	"type": "module",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/opensas/sveltekit-adapter-node-iis.git"
-	},
-	"author": "opensas",
-	"license": "GPL-3.0-or-later",
-	"types": "./index.d.ts",
-	"bugs": {
-		"url": "https://github.com/opensas/sveltekit-adapter-node-iis/issues"
-	},
-	"homepage": "https://github.com/opensas/sveltekit-adapter-node-iis#readme",
-	"dependencies": {
-		"@sveltejs/adapter-node": "^5.0.1"
-	},
 	"keywords": [
 		"sveltekit",
 		"adapter",
 		"node",
 		"iis",
 		"windows",
-		"svelte"
-	]
+		"svelte",
+		"iis-node",
+		"server",
+		"deployment"
+	],
+	"homepage": "https://github.com/opensas/sveltekit-adapter-node-iis#readme",
+	"bugs": {
+		"url": "https://github.com/opensas/sveltekit-adapter-node-iis/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/opensas/sveltekit-adapter-node-iis.git"
+	},
+	"license": "GPL-3.0-or-later",
+	"author": "opensas",
+	"type": "module",
+	"main": "index.js",
+	"types": "./index.d.ts",
+	"exports": {
+		".": {
+			"types": "./index.d.ts",
+			"import": "./index.js",
+			"default": "./index.js"
+		}
+	},
+	"files": [
+		"index.js",
+		"index.d.ts",
+		"files/",
+		"README.md",
+		"LICENSE"
+	],
+	"scripts": {
+		"build": "echo 'Build process would go here'",
+		"test": "echo 'Tests would go here'",
+		"lint": "echo 'Linting would go here'",
+		"prepublishOnly": "npm run build"
+	},
+	"dependencies": {
+		"@sveltejs/adapter-node": "^5.0.1"
+	},
+	"peerDependencies": {
+		"@sveltejs/kit": "^2.0.0"
+	},
+	"devDependencies": {
+		"@sveltejs/kit": "^2.0.0",
+		"typescript": "^5.0.0"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }
