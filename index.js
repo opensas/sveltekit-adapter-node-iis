@@ -23,10 +23,9 @@ export default function (opts = {}) {
   const na = node_adapter({ out, precompress, envPrefix, polyfill });
 
   return {
-    name: "sveltekit-adapter-node-iis",
+    name: "@opensas/sveltekit-adapter-node-iis",
 
     async adapt(builder) {
-      console.info("!!! Running LOCALLY !!!");
       console.info("Running @sveltejs/adapter-node");
       await na.adapt(builder);
       console.info("Finished @sveltejs/adapter-node\r\n");
@@ -39,23 +38,23 @@ export default function (opts = {}) {
       if (copyFiles.length > 0) {
         console.info(`Copying ${copyFiles.length} additional file(s)`);
         for (const file of copyFiles) copyFile(file, out);
-        console.log("\r");
+        console.log();
       }
 
       if (includePackage || buildNodeModules) {
         copyFile("package.json", out);
-        console.log("\r");
+        console.log();
 
         const { lock, command } = installInfo(packageManager);
         if (!existsSync(lock)) {
           throw new Error(
-            `Lock for '${packageManager} not found: ${lock}. Run '${packageManager} install' to generate it.`
+            `Lock for ${packageManager} not found: ${lock}. Run '${packageManager} install' to generate it.`
           );
         }
 
         console.info(`Copying ${packageManager} lock file`);
         copyFile(lock, out);
-        console.log("\r");
+        console.log();
 
         if (buildNodeModules) {
           console.info(`Building node_modules using ${packageManager}`);
@@ -71,7 +70,7 @@ export default function (opts = {}) {
 
 const INSTALL_INFO = {
   npm: { lock: "package-lock.json", command: "npm ci --omit dev" },
-  pnpm: { lock: "pnpm-lock.yaml", command: "pnpm install --prod" },
+  pnpm: { lock: "pnpm-lock.yaml", command: "pnpm install --production" },
   yarn: { lock: "yarn.lock", command: "yarn install --production" },
   bun: { lock: "bun.lockb", command: "bun install --production" },
   "bun (text lock file)": {
@@ -84,7 +83,7 @@ const INSTALL_INFO = {
 function installInfo(packageManager) {
   if (packageManager === "bun") {
     if (existsSync(INSTALL_INFO["bun"].lock)) return INSTALL_INFO["bun"];
-    INSTALL_INFO["bun (text lock file)"];
+    return INSTALL_INFO["bun (text lock file)"];
   }
   const info = INSTALL_INFO[packageManager];
   if (!info) throw new Error(`Unknown packageManager: ${packageManager}`);
