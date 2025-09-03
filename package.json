@@ -1,20 +1,2 @@
 {
-  "name": "sveltekit-adapter-node-iis",
-  "version": "0.2.0",
-  "description": "Adapter for SvelteKit that generates a Node server for IIS",
-  "main": "index.js",
-  "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Vuferen/sveltekit-adapter-node-iis.git"
-  },
-  "author": "Vuferen",
-  "types": "./index.d.ts",
-  "bugs": {
-    "url": "https://github.com/Vuferen/sveltekit-adapter-node-iis/issues"
-  },
-  "homepage": "https://github.com/Vuferen/sveltekit-adapter-node-iis#readme",
-  "dependencies": {
-    "@sveltejs/adapter-node": "^5.0.1"
-  }
-}
+	"license": "GPL-3.0-or-later",
