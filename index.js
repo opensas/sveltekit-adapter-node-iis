@@ -1,6 +1,6 @@
 import node_adapter from "@sveltejs/adapter-node";
-import { join } from "node:path";
-import { copyFileSync, existsSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { copyFileSync, existsSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
 
@@ -15,8 +15,8 @@ export default function (opts = {}) {
     polyfill = true,
     includePackage = true,
     buildNodeModules = false,
-    transferEnv = false,
     packageManager = "npm",
+    copyFiles = [],
   } = opts;
 
   /** @type {import('@sveltejs/kit').Adapter} */
@@ -26,37 +26,43 @@ export default function (opts = {}) {
     name: "sveltekit-adapter-node-iis",
 
     async adapt(builder) {
+      console.info("!!! Running LOCALLY !!!");
       console.info("Running @sveltejs/adapter-node");
       await na.adapt(builder);
-      console.info("Finished @sveltejs/adapter-node");
+      console.info("Finished @sveltejs/adapter-node\r\n");
 
-      console.info("Running @opensas/sveltekit-adapter-node-iis");
+      console.info("Running @opensas/sveltekit-adapter-node-iis\r\n");
 
       copyFileSync(join(files, "server.cjs"), join(out, "server.cjs"));
       copyFileSync(join(files, "web.config"), join(out, "web.config"));
 
-      if (includePackage) {
-        copyFileSync("package.json", join(out, "package.json"));
+      if (copyFiles.length > 0) {
+        console.info(`Copying ${copyFiles.length} additional file(s)`);
+        for (const file of copyFiles) copyFile(file, out);
+        console.log("\r");
+      }
+
+      if (includePackage || buildNodeModules) {
+        copyFile("package.json", out);
+        console.log("\r");
 
         const { lock, command } = installInfo(packageManager);
         if (!existsSync(lock)) {
           throw new Error(
-            `Lock lock not found: ${lock}. Required for packageManager: '${packageManager}'. Run '${packageManager} install' to generate it.`
+            `Lock for '${packageManager} not found: ${lock}. Run '${packageManager} install' to generate it.`
           );
         }
 
-        // copyFileSync("package-lock.json", join(out, "package-lock.json"));
-        copyFileSync(lock, join(out, lock));
-        console.log(`Copied ${packageManager} lock file ${lock}`);
+        console.info(`Copying ${packageManager} lock file`);
+        copyFile(lock, out);
+        console.log("\r");
 
         if (buildNodeModules) {
           console.info(`Building node_modules using ${packageManager}`);
-          console.info(`About to run: cd ${out} && ${command}`);
+          console.info(`Running: cd ${out} && ${command}\r\n`);
           execSync(`cd ${out} && ${command}`, { stdio: [0, 1, 2] });
         }
       }
-
-      if (transferEnv) copyFileSync(".env", join(out, ".env"));
 
       console.info("Finished @opensas/sveltekit-adapter-node-iis");
     },
@@ -83,4 +89,24 @@ function installInfo(packageManager) {
   const info = INSTALL_INFO[packageManager];
   if (!info) throw new Error(`Unknown packageManager: ${packageManager}`);
   return info;
+}
+
+function copyFile(file, out) {
+  try {
+    if (!existsSync(file)) {
+      console.warn(`File not found, skipping: ${file}`);
+      return;
+    }
+
+    const dest = join(out, file);
+    const destDir = dirname(dest);
+
+    // Create destination directory recursively
+    if (!existsSync(destDir)) mkdirSync(destDir, { recursive: true });
+
+    copyFileSync(file, dest);
+    console.log(`✓ Copied: ${file} → ${dest}`);
+  } catch (error) {
+    console.error(`Failed to copy ${file}:`, error.message);
+  }
 }
