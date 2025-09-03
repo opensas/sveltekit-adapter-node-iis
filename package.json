@@ -1,6 +1,6 @@
 {
 	"name": "@opensas/sveltekit-adapter-node-iis",
-	"version": "0.2.0-opensas.1",
+	"version": "0.2.0",
 	"description": "Adapter for SvelteKit that generates a Node server for IIS",
 	"keywords": [
 		"sveltekit",
