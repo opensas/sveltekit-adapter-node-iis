@@ -1,6 +1,6 @@
 import node_adapter from "@sveltejs/adapter-node";
 import { join } from "node:path";
-import { copyFileSync } from "node:fs";
+import { copyFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
 
@@ -16,6 +16,7 @@ export default function (opts = {}) {
     includePackage = true,
     buildNodeModules = false,
     transferEnv = false,
+    packageManager = "npm",
   } = opts;
 
   /** @type {import('@sveltejs/kit').Adapter} */
@@ -25,7 +26,6 @@ export default function (opts = {}) {
     name: "sveltekit-adapter-node-iis",
 
     async adapt(builder) {
-      console.info("!!! v3*** Running local version using pnpm link!!!");
       console.info("Running @sveltejs/adapter-node");
       await na.adapt(builder);
       console.info("Finished @sveltejs/adapter-node");
@@ -37,11 +37,22 @@ export default function (opts = {}) {
 
       if (includePackage) {
         copyFileSync("package.json", join(out, "package.json"));
-        copyFileSync("package-lock.json", join(out, "package-lock.json"));
+
+        const { lock, command } = installInfo(packageManager);
+        if (!existsSync(lock)) {
+          throw new Error(
+            `Lock lock not found: ${lock}. Required for packageManager: '${packageManager}'. Run '${packageManager} install' to generate it.`
+          );
+        }
+
+        // copyFileSync("package-lock.json", join(out, "package-lock.json"));
+        copyFileSync(lock, join(out, lock));
+        console.log(`Copied ${packageManager} lock file ${lock}`);
 
         if (buildNodeModules) {
-          console.info("Building node_modules");
-          execSync(`cd ${out} && npm ci --omit dev`, { stdio: [0, 1, 2] });
+          console.info(`Building node_modules using ${packageManager}`);
+          console.info(`About to run: cd ${out} && ${command}`);
+          execSync(`cd ${out} && ${command}`, { stdio: [0, 1, 2] });
         }
       }
 
@@ -50,4 +61,26 @@ export default function (opts = {}) {
       console.info("Finished @opensas/sveltekit-adapter-node-iis");
     },
   };
+}
+
+const INSTALL_INFO = {
+  npm: { lock: "package-lock.json", command: "npm ci --omit dev" },
+  pnpm: { lock: "pnpm-lock.yaml", command: "pnpm install --prod" },
+  yarn: { lock: "yarn.lock", command: "yarn install --production" },
+  bun: { lock: "bun.lockb", command: "bun install --production" },
+  "bun (text lock file)": {
+    lock: "bun.lock",
+    command: "bun install --production",
+  },
+  deno: { lock: "deno.lock", command: "deno cache --node-modules-dir" },
+};
+
+function installInfo(packageManager) {
+  if (packageManager === "bun") {
+    if (existsSync(INSTALL_INFO["bun"].lock)) return INSTALL_INFO["bun"];
+    INSTALL_INFO["bun (text lock file)"];
+  }
+  const info = INSTALL_INFO[packageManager];
+  if (!info) throw new Error(`Unknown packageManager: ${packageManager}`);
+  return info;
 }
