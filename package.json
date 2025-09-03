@@ -41,10 +41,10 @@
 		"LICENSE"
 	],
 	"scripts": {
-		"build": "echo 'Build process would go here'",
+		"build": "echo 'No build needed - JavaScript files are ready'",
 		"test": "echo 'Tests would go here'",
 		"lint": "echo 'Linting would go here'",
-		"prepublishOnly": "npm run build"
+		"prepublishOnly": "echo 'Ready to publish!'"
 	},
 	"dependencies": {
 		"@sveltejs/adapter-node": "^5.0.1"
