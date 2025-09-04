@@ -39,14 +39,23 @@ export default {
 
 ## Options
 
-Here is the pretty-formatted markdown table:
-
 | **Option**         | **Default** | **Description**                                                                                                  |
 | :----------------- | :---------- | :--------------------------------------------------------------------------------------------------------------- |
 | `includePackage`   | `true`      | Copies `package.json` and `package-lock.json` to the output directory.                                           |
 | `buildNodeModules` | `false`     | Builds `node_modules` in the output directory. Asumes `includePackage` to be `true`.                             |
+| `buildNodeCommand` | `"npm"`     | Allows to override the command used to build `node_modules`.                                                     |
 | `packageManger`    | `npm`       | Package manager to use. Options `npm` `pnpm` `yarn` `bun` `deno`                                                 |
 | `copyFiles`        | `[]`        | Array of additional files to copy to the output directory (e.g., `["prisma/schema.prisma", ".env.production"]`). |
+
+Default build command for each package manager:
+
+| **Package Manager** | **Command**                     |
+| ------------------- | ------------------------------- |
+| `npm`               | `npm ci --omit dev`             |
+| `pnpm`              | `pnpm install --production`     |
+| `yarn`              | `yarn install --production`     |
+| `bun`               | `bun install --production`      |
+| `deno`              | `deno cache --node-modules-dir` |
 
 ## 💡 Example Configuration
 

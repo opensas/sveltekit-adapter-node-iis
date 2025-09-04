@@ -15,6 +15,7 @@ export default function (opts = {}) {
     polyfill = true,
     includePackage = true,
     buildNodeModules = false,
+    buildCommand = "",
     packageManager = "npm",
     copyFiles = [],
   } = opts;
@@ -57,9 +58,10 @@ export default function (opts = {}) {
         console.log();
 
         if (buildNodeModules) {
+          const buildCmd = buildCommand || command;
           console.info(`Building node_modules using ${packageManager}`);
-          console.info(`Running: cd ${out} && ${command}\r\n`);
-          execSync(`cd ${out} && ${command}`, { stdio: [0, 1, 2] });
+          console.info(`Running: cd ${out} && ${buildCmd}\r\n`);
+          execSync(`cd ${out} && ${buildCmd}`, { stdio: [0, 1, 2] });
         }
       }
 
