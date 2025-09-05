@@ -39,14 +39,50 @@ export default {
 
 ## Options
 
-Here is the pretty-formatted markdown table:
+| **Option**         | **Default**                  | **Description**                                                                                   |
+| :----------------- | :--------------------------- | :------------------------------------------------------------------------------------------------ |
+| `includePackage`   | `true`                       | Copies `package.json` and the lock file for the selected package manager to the output directory. |
+| `buildNodeModules` | `false`                      | Builds `node_modules` in the output directory. Assumes `includePackage` to be `true`.             |
+| `buildCommand`     | `(package manager specific)` | Allows overriding the command used to build `node_modules`.                                       |
+| `packageManager`   | `npm`                        | Package manager to use. Options `npm` `pnpm` `yarn` `bun` `deno`                                  |
+| `copyFiles`        | `[]`                         | Array of additional files, folders, or { src, dest } objects to copy to the output directory.     |
 
-| **Option**         | **Default** | **Description**                                                                                                  |
-| :----------------- | :---------- | :--------------------------------------------------------------------------------------------------------------- |
-| `includePackage`   | `true`      | Copies `package.json` and `package-lock.json` to the output directory.                                           |
-| `buildNodeModules` | `false`     | Builds `node_modules` in the output directory. Asumes `includePackage` to be `true`.                             |
-| `packageManger`    | `npm`       | Package manager to use. Options `npm` `pnpm` `yarn` `bun` `deno`                                                 |
-| `copyFiles`        | `[]`        | Array of additional files to copy to the output directory (e.g., `["prisma/schema.prisma", ".env.production"]`). |
+### `copyFiles` option
+
+The `copyFiles` setting accepts a mix of file paths, folder paths, or objects.  
+Each object must have a `src` property (source path) and may optionally include a `dest` property (destination path inside the output folder).
+
+By default, `copyFiles` reproduces the structure of the source directory under the output folder.  
+If you want to rename or relocate a file/folder in the build output, provide a `dest` property.
+
+> When copying folders, only files directly inside are copied (non-recursive).
+
+#### Example
+
+```js
+adapter = iisAdapter({
+  includePackage: true,
+  buildNodeModules: true,
+  copyFiles: [
+    "prisma/schema.prisma", // single file → preserved: build/prisma/schema.prisma
+    "iis", // folder → copies all files inside: build/iis/*
+    { src: "iis", dest: "." }, // folder → copied into output root: build/*
+    { src: "a/b.txt", dest: "c/d.txt" }, // file → renamed in output: build/c/d.txt
+  ],
+});
+```
+
+Default build command for each package manager:
+
+| **Package Manager** | **Command**                                                 |
+| ------------------- | ----------------------------------------------------------- |
+| `npm`               | `npm ci --omit dev`                                         |
+| `pnpm`              | `pnpm install --production --config.node-linker=hoisted` \* |
+| `yarn`              | `yarn install --production`                                 |
+| `bun`               | `bun install --production`                                  |
+| `deno`              | `deno cache --node-modules-dir`                             |
+
+> `*` Using `--config.node-linker=hoisted` creates a flat `node_modules` layout (like npm/yarn), avoiding symlink issues on Windows/IIS and ensuring compatibility.
 
 ## 💡 Example Configuration
 
