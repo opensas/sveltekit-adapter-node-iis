@@ -33,17 +33,21 @@ export default function (opts = {}) {
     name: "@opensas/sveltekit-adapter-node-iis",
 
     async adapt(builder) {
-      console.info("Running @sveltejs/adapter-node");
+      console.info("[adapter-iis] Running @sveltejs/adapter-node");
       await na.adapt(builder);
-      console.info("Finished @sveltejs/adapter-node\r\n");
+      console.info("[adapter-iis] Finished @sveltejs/adapter-node\r\n");
 
-      console.info("Running @opensas/sveltekit-adapter-node-iis\r\n");
+      console.info(
+        "[adapter-iis] Running @opensas/sveltekit-adapter-node-iis\r\n"
+      );
 
       copyFileSync(join(filesFolder, "server.cjs"), join(out, "server.cjs"));
       copyFileSync(join(filesFolder, "web.config"), join(out, "web.config"));
 
       if (copyFiles.length > 0) {
-        console.info(`Copying ${copyFiles.length} additional file(s)`);
+        console.info(
+          `[adapter-iis] Copying ${copyFiles.length} additional file(s)`
+        );
         copyBuildFiles(copyFiles, out);
         console.log();
       }
@@ -55,23 +59,27 @@ export default function (opts = {}) {
         const { lock, command } = installInfo(packageManager);
         if (!existsSync(lock)) {
           throw new Error(
-            `Lock for ${packageManager} not found: ${lock}. Run '${packageManager} install' to generate it.`
+            `[adapter-iis] Lock for ${packageManager} not found: ${lock}. Run '${packageManager} install' to generate it.`
           );
         }
 
-        console.info(`Copying ${packageManager} lock file`);
+        console.info(`[adapter-iis] Copying ${packageManager} lock file`);
         copyBuildFiles(lock, out);
         console.log();
 
         if (buildNodeModules) {
           const buildCmd = buildCommand || command;
-          console.info(`Building node_modules using ${packageManager}`);
-          console.info(`Running: cd ${out} && ${buildCmd}\r\n`);
+          console.info(
+            `[adapter-iis] Building node_modules using ${packageManager}`
+          );
+          console.info(`[adapter-iis] Running: cd ${out} && ${buildCmd}\r\n`);
           execSync(`cd ${out} && ${buildCmd}`, { stdio: [0, 1, 2] });
         }
       }
 
-      console.info("✅ Finished @opensas/sveltekit-adapter-node-iis");
+      console.info(
+        "[adapter-iis] ✅ Finished @opensas/sveltekit-adapter-node-iis"
+      );
     },
   };
 }
@@ -98,7 +106,8 @@ function installInfo(packageManager) {
     return INSTALL_INFO["bun (text lock file)"];
   }
   const info = INSTALL_INFO[packageManager];
-  if (!info) throw new Error(`Unknown packageManager: ${packageManager}`);
+  if (!info)
+    throw new Error(`[adapter-iis] Unknown packageManager: ${packageManager}`);
   return info;
 }
 
@@ -138,7 +147,7 @@ export function copyBuildFiles(items, out, dryRun = false) {
     const dest = typeof item === "string" ? "" : item.dest || "";
 
     if (!existsSync(src)) {
-      console.warn(`Source not found, skipping: ${src}`);
+      console.warn(`[adapter-iis] Source not found, skipping: ${src}`);
       continue;
     }
 
@@ -156,7 +165,7 @@ export function copyBuildFiles(items, out, dryRun = false) {
     } else if (isSrcFile) {
       matches = [src];
     } else {
-      console.warn(`Skipping non-file/non-folder: ${src}`);
+      console.warn(`[adapter-iis] Skipping non-file/non-folder: ${src}`);
       continue;
     }
 
@@ -181,12 +190,14 @@ export function copyBuildFiles(items, out, dryRun = false) {
       }
 
       if (dryRun) {
-        console.log(`[dry-run] Would copy: ${srcFilePath} → ${destFilePath}`);
+        console.log(
+          `[adapter-iis][dry-run] Would copy: ${srcFilePath} → ${destFilePath}`
+        );
       } else {
         const destDir = dirname(destFilePath);
         if (!existsSync(destDir)) mkdirSync(destDir, { recursive: true });
         copyFileSync(srcFilePath, destFilePath);
-        console.log(`✓ Copied: ${srcFilePath} → ${destFilePath}`);
+        console.log(`[adapter-iis] ✓ Copied: ${srcFilePath} → ${destFilePath}`);
       }
     }
   }
