@@ -6,8 +6,12 @@ All notable changes to `@opensas/sveltekit-adapter-node-iis` will be documented 
 
 ### Added
 
+- NEW `copyFiles` now supports folders and { src, target } items
 - NEW `buildCommand` option: Allows to override the command used to build `node_modules`
 - Fixed file names to make them compatible with Linux and Windows
+- Updated default build command for pnpm:
+  `pnpm install --production --config.node-linker=hoisted`
+  to avoid Windows/IIS symlink issues
 
 ## [0.3.0] - 2025-09-02
 
