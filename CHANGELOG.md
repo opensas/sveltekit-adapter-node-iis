@@ -2,6 +2,18 @@
 
 All notable changes to `@opensas/sveltekit-adapter-node-iis` will be documented in this file.
 
+## [0.4.1] - 2026-07-02
+
+### Fixed
+
+- Added `--ignore-workspace` to the default pnpm build command. Without it, if the
+  consuming project has a `pnpm-workspace.yaml` at its root (e.g. just to configure
+  `allowBuilds` under pnpm ≥11, with no actual multi-package workspace), pnpm treats
+  the nested output folder as part of that same workspace when walking up the
+  directory tree. That silently absorbs the `pnpm install --production` step into the
+  parent scope — it reports "Already up to date" but installs nothing at all, not even
+  production dependencies, shipping a broken `node_modules` to production.
+
 ## [0.4.0] - 2025-09-04
 
 ### Added
