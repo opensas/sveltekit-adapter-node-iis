@@ -88,8 +88,16 @@ const INSTALL_INFO = {
   npm: { lock: "package-lock.json", command: "npm ci --omit dev" },
   pnpm: {
     lock: "pnpm-lock.yaml",
-    // use node-linker=hoisted to avoid Windows/IIS symlink issues
-    command: "pnpm install --production --config.node-linker=hoisted",
+    // use node-linker=hoisted to avoid Windows/IIS symlink issues.
+    // --ignore-workspace: if the consuming project has a pnpm-workspace.yaml at its
+    // root (e.g. just to configure allowBuilds under pnpm >=11, with no actual
+    // multi-package workspace), pnpm treats this nested `out` folder as part of that
+    // same workspace when walking up the directory tree. That silently absorbs this
+    // install into the parent scope — it reports "Already up to date" but installs
+    // nothing at all, not even production dependencies. --ignore-workspace forces
+    // pnpm to treat `out` as its own independent project root again.
+    command:
+      "pnpm install --production --config.node-linker=hoisted --ignore-workspace",
   },
   yarn: { lock: "yarn.lock", command: "yarn install --production" },
   bun: { lock: "bun.lockb", command: "bun install --production" },
