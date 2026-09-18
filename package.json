@@ -13,13 +13,13 @@
 		"server",
 		"deployment"
 	],
-	"homepage": "https://github.com/opensas/sveltekit-adapter-node-iis#readme",
+	"homepage": "https://gitlab.com/trabajo-it/comun/sveltekit-adapter-node-iis#readme",
 	"bugs": {
-		"url": "https://github.com/opensas/sveltekit-adapter-node-iis/issues"
+		"url": "https://gitlab.com/trabajo-it/comun/sveltekit-adapter-node-iis/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/opensas/sveltekit-adapter-node-iis.git"
+		"url": "git+https://gitlab.com/trabajo-it/comun/sveltekit-adapter-node-iis.git"
 	},
 	"license": "GPL-3.0-or-later",
 	"author": "opensas",
