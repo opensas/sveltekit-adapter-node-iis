@@ -20,23 +20,43 @@ without jumping to SvelteKit 3 by accident.
 
 ## Release from `main` (`latest`)
 
+`main` is protected in GitLab (nobody pushes to it directly), so every release goes through a merge
+request. The tag is created after the merge, on the commit that landed in `main`.
+
 ```bash
+# 1. release branch
 git checkout main && git pull
+git checkout -b release/X.Y.Z
 # bump "version" in package.json and add the entry to CHANGELOG.md
 pnpm test
-git commit -am "X.Y.Z" && git tag vX.Y.Z
-git push origin main vX.Y.Z && git push github main vX.Y.Z
+git commit -am "X.Y.Z"
+git push -u origin release/X.Y.Z   # open the MR from the link GitLab prints, merge it once CI passes
+
+# 2. after the merge: tag, mirror to GitHub and publish
+git checkout main && git pull
+git tag -a vX.Y.Z -m "X.Y.Z"
+git push origin vX.Y.Z && git push github main vX.Y.Z
 npm publish
 ```
 
 ## Release a SvelteKit 2 fix (`v0.4.x`, `kit2`)
 
+Same flow, with `v0.4.x` as the MR target branch:
+
 ```bash
+# 1. release branch
 git checkout v0.4.x && git pull
+git checkout -b release/0.4.N
 # fix (or cherry-pick from main), bump to 0.4.N, add the entry to CHANGELOG.md
-git commit -am "0.4.N" && git tag v0.4.N
-git push origin v0.4.x v0.4.N && git push github v0.4.x v0.4.N
+git commit -am "0.4.N"
+git push -u origin release/0.4.N   # open the MR against v0.4.x (not main) and merge it
+
+# 2. after the merge: tag, mirror to GitHub and publish
+git checkout v0.4.x && git pull
+git tag -a v0.4.N -m "0.4.N"
+git push origin v0.4.N && git push github v0.4.x v0.4.N
 npm publish --tag kit2   # without --tag it would become `latest`
 ```
 
-Add the entry to the `CHANGELOG.md` of `main` too, so the full history stays in one place.
+Add the entry to the `CHANGELOG.md` of `main` too (also through an MR), so the full history stays in
+one place.

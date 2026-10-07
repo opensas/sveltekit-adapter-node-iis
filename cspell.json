@@ -10,6 +10,7 @@
 		"LICENSE"
 	],
 	"words": [
+		"deno",
 		"esbuild",
 		"iisnode",
 		"opensas",
