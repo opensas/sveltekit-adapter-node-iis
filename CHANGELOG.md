@@ -2,6 +2,18 @@
 
 All notable changes to `@opensas/sveltekit-adapter-node-iis` will be documented in this file.
 
+## [0.4.2] - 2026-10-07
+
+Last planned release for SvelteKit 2. From `0.5.0` on the adapter targets SvelteKit 3; fixes for
+SvelteKit 2 are released from the `v0.4.x` branch (see [RELEASING.md](RELEASING.md)).
+
+### Fixed
+
+- The adapter returned only `name` and `adapt`, dropping everything else `@sveltejs/adapter-node`
+  returns. With SvelteKit 2 that lost `supports`, so SvelteKit reported that the adapter did not
+  support `read` from `$app/server` nor instrumentation.
+- `package.json` repository, homepage and bugs point to GitLab.
+
 ## [0.4.1] - 2026-07-02
 
 ### Fixed

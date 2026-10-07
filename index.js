@@ -30,6 +30,9 @@ export default function (opts = {}) {
   const na = node_adapter({ out, precompress, envPrefix, polyfill });
 
   return {
+    // keeps everything else adapter-node returns (e.g. `supports`, which SvelteKit
+    // checks for `read` from `$app/server` and instrumentation)
+    ...na,
     name: "@opensas/sveltekit-adapter-node-iis",
 
     async adapt(builder) {

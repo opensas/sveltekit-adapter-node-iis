@@ -21,6 +21,17 @@ This adapter extends `@sveltejs/adapter-node` with IIS-specific functionality:
 npm install -D @opensas/sveltekit-adapter-node-iis
 ```
 
+## 🧩 Compatibility
+
+| **Adapter** | **SvelteKit** | **`@sveltejs/adapter-node`** | **Node**  |
+| :---------- | :------------ | :--------------------------- | :-------- |
+| `0.5.x`     | `3.x`         | `6.x`                        | `>=22.17` |
+| `0.4.x`     | `2.x`         | `5.x`                        | `>=18`    |
+
+`@sveltejs/adapter-node` is installed as a dependency of this adapter, so there is nothing else to install.
+Being `0.x`, a `^0.4.1` range never resolves to `0.5.0`: SvelteKit 2 projects stay on `0.4.x`.
+To install the SvelteKit 2 line explicitly: `npm install -D @opensas/sveltekit-adapter-node-iis@kit2`.
+
 ## ⚙️ Usage
 
 In your svelte.config.js:
@@ -77,7 +88,7 @@ Default build command for each package manager:
 | **Package Manager** | **Command**                                                 |
 | ------------------- | ----------------------------------------------------------- |
 | `npm`               | `npm ci --omit dev`                                         |
-| `pnpm`              | `pnpm install --production --config.node-linker=hoisted` \* |
+| `pnpm`              | `pnpm install --production --config.node-linker=hoisted --ignore-workspace` \* |
 | `yarn`              | `yarn install --production`                                 |
 | `bun`               | `bun install --production`                                  |
 | `deno`              | `deno cache --node-modules-dir`                             |
