@@ -1,0 +1,19 @@
+{
+	"language": "en,es",
+	"ignorePaths": [
+		"node_modules",
+		".svelte-kit",
+		"build",
+		"dist",
+		"pnpm-lock.yaml",
+		"package-lock.json",
+		"LICENSE"
+	],
+	"words": [
+		"esbuild",
+		"iisnode",
+		"opensas",
+		"prerendered",
+		"Vuferen"
+	]
+}

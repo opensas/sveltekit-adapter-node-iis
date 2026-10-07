@@ -85,13 +85,13 @@ adapter = iisAdapter({
 
 Default build command for each package manager:
 
-| **Package Manager** | **Command**                                                 |
-| ------------------- | ----------------------------------------------------------- |
-| `npm`               | `npm ci --omit dev`                                         |
+| **Package Manager** | **Command**                                                                    |
+| ------------------- | ------------------------------------------------------------------------------ |
+| `npm`               | `npm ci --omit dev`                                                            |
 | `pnpm`              | `pnpm install --production --config.node-linker=hoisted --ignore-workspace` \* |
-| `yarn`              | `yarn install --production`                                 |
-| `bun`               | `bun install --production`                                  |
-| `deno`              | `deno cache --node-modules-dir`                             |
+| `yarn`              | `yarn install --production`                                                    |
+| `bun`               | `bun install --production`                                                     |
+| `deno`              | `deno cache --node-modules-dir`                                                |
 
 > `*` Using `--config.node-linker=hoisted` creates a flat `node_modules` layout (like npm/yarn), avoiding symlink issues on Windows/IIS and ensuring compatibility.
 
