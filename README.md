@@ -34,6 +34,28 @@ To install the SvelteKit 2 line explicitly: `npm install -D @opensas/sveltekit-a
 
 ## ⚙️ Usage
 
+### SvelteKit 3
+
+SvelteKit 3 no longer reads `svelte.config.js`: the adapter goes in the `sveltekit()` plugin options in `vite.config.js`:
+
+```js
+import { sveltekit } from "@sveltejs/kit/vite";
+import adapter from "@opensas/sveltekit-adapter-node-iis";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [
+    sveltekit({
+      adapter: adapter({
+        // your options here
+      }),
+    }),
+  ],
+});
+```
+
+### SvelteKit 2 (adapter `0.4.x`)
+
 In your svelte.config.js:
 
 ```js
@@ -47,6 +69,16 @@ export default {
   },
 };
 ```
+
+### Migrating from 0.4.x to 0.5.x
+
+- Move the adapter from `svelte.config.js` to `vite.config.js` (`npx sv migrate sveltekit-3` does it).
+- adapter-node 6 removed the `ORIGIN` environment variable: set `paths.origin` in the `sveltekit()` options instead,
+  or let the origin be derived from the request (`PROTOCOL_HEADER` / `HOST_HEADER`).
+  SvelteKit 3 always checks the origin of form submissions (CSRF), so make sure `url.origin` is right behind IIS.
+- The `polyfill` option is ignored (adapter-node 5.5 already ignored it).
+- adapter-node 6 bundles the whole server with rolldown except the `dependencies` of your `package.json`,
+  so only those are installed in the output folder when `buildNodeModules` is `true`.
 
 ## Options
 
@@ -98,22 +130,26 @@ Default build command for each package manager:
 ## 💡 Example Configuration
 
 ```js
+import { sveltekit } from "@sveltejs/kit/vite";
 import adapter from "@opensas/sveltekit-adapter-node-iis";
+import { defineConfig } from "vite";
 
-export default {
-  kit: {
-    adapter: adapter({
-      includePackage: true,
-      buildNodeModules: true,
-      packageManager: "pnpm",
-      copyFiles: [
-        ".env.production",
-        "prisma/schema.prisma",
-        "config/production.json",
-      ],
+export default defineConfig({
+  plugins: [
+    sveltekit({
+      adapter: adapter({
+        includePackage: true,
+        buildNodeModules: true,
+        packageManager: "pnpm",
+        copyFiles: [
+          ".env.production",
+          "prisma/schema.prisma",
+          "config/production.json",
+        ],
+      }),
     }),
-  },
-};
+  ],
+});
 ```
 
 ## 🏗️ How It Works
@@ -132,10 +168,13 @@ export default {
 
 ```shell
 # Clone the repository
-git clone https://github.com/opensas/sveltekit-adapter-node-iis.git
+git clone https://gitlab.com/trabajo-it/comun/sveltekit-adapter-node-iis.git
 
 # Install dependencies
 pnpm install
+
+# Build test/app with the adapter and serve it through server.cjs
+pnpm test
 
 # Link locally for testing
 pnpm link

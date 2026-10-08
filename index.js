@@ -18,7 +18,6 @@ export default function (opts = {}) {
     out = "build",
     precompress,
     envPrefix = "",
-    polyfill = true,
     includePackage = true,
     buildNodeModules = false,
     buildCommand = "",
@@ -27,11 +26,11 @@ export default function (opts = {}) {
   } = opts;
 
   /** @type {import('@sveltejs/kit').Adapter} */
-  const na = node_adapter({ out, precompress, envPrefix, polyfill });
+  const na = node_adapter({ out, precompress, envPrefix });
 
   return {
-    // keeps everything else adapter-node returns (e.g. `supports`, which SvelteKit
-    // checks for `read` from `$app/server` and instrumentation)
+    // keeps `supports` and `vite`: adapter-node 6 adds its server entrypoints
+    // (adapter-index, adapter-env, handler) to the SSR build through `vite.plugins`
     ...na,
     name: "@opensas/sveltekit-adapter-node-iis",
 

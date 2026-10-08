@@ -1,0 +1,36 @@
+stages:
+  - ci
+
+default:
+  image: node:24.19.0
+  tags:
+    - local
+
+.setup:
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+        - test/app/pnpm-lock.yaml
+    paths:
+      - .pnpm-store
+  variables:
+    PNPM_HOME: '$CI_PROJECT_DIR/.pnpm-store'
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@11.21.0 --activate
+    - pnpm config set store-dir $PNPM_HOME
+    - pnpm install
+
+# Build de test/app con el adapter y request a server.cjs sobre el socket de PORT (como iisnode).
+# En los MR es manual pero bloquea el merge hasta que pase; en main corre solo.
+test:
+  extends: .setup
+  stage: ci
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: false
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  script:
+    - pnpm test

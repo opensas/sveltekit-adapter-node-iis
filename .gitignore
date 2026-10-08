@@ -37,3 +37,6 @@ yalc.lock
 package-lock.json
 yarn.lock
 # but keep pnpm-lock.yaml if you use pnpm
+# Test app output
+test/app/node_modules/
+test/app/.svelte-kit/

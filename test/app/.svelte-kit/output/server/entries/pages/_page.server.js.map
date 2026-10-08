@@ -1,1 +1,0 @@
-{"version":3,"file":"_page.server.js","names":[],"sources":["../../../../../src/routes/+page.server.js"],"sourcesContent":["export function load() {\n\treturn { message: 'hello from iis' };\n}\n"],"mappings":";AAAA,SAAgB,OAAO;CACtB,OAAO,EAAE,SAAS,iBAAiB;AACpC"}

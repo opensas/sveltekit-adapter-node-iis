@@ -1,1 +1,0 @@
-{"version":3,"file":"_page.svelte.js","names":["$.escape"],"sources":["../../../../../src/routes/+page.svelte"],"sourcesContent":["<script>\n\tlet { data } = $props();\n</script>\n\n<h1>{data.message}</h1>\n"],"mappings":";;;CAAA,WAAA,WAAA,eAAA;EACC,IAAI,EAAE,SAAM;EAGR,WAAA,KAAA,OAAAA,YAAA,KAAK,OAAO,EAAA,MAAA;CAFT,CAAA"}

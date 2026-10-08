@@ -2,6 +2,29 @@
 
 All notable changes to `@opensas/sveltekit-adapter-node-iis` will be documented in this file.
 
+## [0.5.0] - 2026-10-07
+
+SvelteKit 3 support. Use `0.4.x` for SvelteKit 2 (see the compatibility table in the README).
+
+### Changed
+
+- **BREAKING:** requires `@sveltejs/kit` 3 and Node 22.17+. Depends on `@sveltejs/adapter-node` 6.
+- The adapter is configured in the `sveltekit()` options of `vite.config.js` (SvelteKit 3 no longer
+  reads `svelte.config.js`).
+- `ORIGIN` is gone in adapter-node 6: use `paths.origin` in the SvelteKit config.
+- `polyfill` is deprecated and ignored.
+
+### Fixed
+
+- The SvelteKit 3 build: the adapter now keeps the Vite plugin adapter-node 6 returns, which adds
+  the server entrypoints to the build. Without it `build/index.js` imported a missing
+  `server/adapter-index.js` (same `...na` fix as `0.4.2`).
+
+### Added
+
+- `pnpm test`: builds a minimal SvelteKit app with the adapter and serves it through `server.cjs`
+  on the socket passed in `PORT`, as iisnode does.
+
 ## [0.4.2] - 2026-10-07
 
 Last planned release for SvelteKit 2. From `0.5.0` on the adapter targets SvelteKit 3; fixes for

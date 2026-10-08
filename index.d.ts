@@ -7,6 +7,7 @@ interface AdapterOptions {
 	precompress?: boolean;
 	/** Specify a prefix to change the name of the environment variables used to configure the deployment */
 	envPrefix?: string;
+	/** @deprecated Ignored. adapter-node 5.5 already ignored it and adapter-node 6 removed it. */
 	polyfill?: boolean;
 	/** Copies `package.json` and `package-lock.json` to the output directory. */
 	includePackage?: boolean;
