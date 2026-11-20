@@ -7,7 +7,7 @@ this adapter) has one major per SvelteKit major:
 
 | **Line** | **SvelteKit** | **`@sveltejs/adapter-node`** | **Branch** | **npm dist-tag** |
 | :------- | :------------ | :--------------------------- | :--------- | :--------------- |
-| `0.5.x`  | `3.x`         | `6.x`                        | `main`     | `latest`         |
+| `1.x`    | `3.x`         | `6.x`                        | `main`     | `latest`         |
 | `0.4.x`  | `2.x`         | `5.x`                        | `v0.4.x`   | `kit2`           |
 
 - `main` holds the current line and is published as `latest`.
@@ -15,8 +15,13 @@ this adapter) has one major per SvelteKit major:
   SvelteKit 2 go there and are published with the `kit2` dist-tag, so they never replace `latest`.
 - Every published version gets a `vX.Y.Z` tag.
 
-Being `0.x`, `^0.4.1` does not accept `0.5.0`, so SvelteKit 2 projects keep getting `0.4.x` fixes
-without jumping to SvelteKit 3 by accident.
+Being `0.x`, `^0.4.1` does not accept `0.5.0` or `1.0.0`, so SvelteKit 2 projects keep getting
+`0.4.x` fixes without jumping to SvelteKit 3 by accident.
+
+`1.0.0` declared the API stable (it is `0.5.x` with the deprecated `polyfill` option removed from the
+types). From then on SemVer applies as usual: a breaking change bumps the major, and so does the
+next SvelteKit major (SvelteKit 4 would be `2.x`, with `1.x` moving to its own branch and dist-tag,
+as `0.4.x` did). `0.5.x` gets no more releases: SvelteKit 3 projects update to `^1.0.0`.
 
 ## Release from `main` (`latest`)
 

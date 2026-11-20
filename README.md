@@ -25,11 +25,14 @@ npm install -D @opensas/sveltekit-adapter-node-iis
 
 | **Adapter** | **SvelteKit** | **`@sveltejs/adapter-node`** | **Node**  |
 | :---------- | :------------ | :--------------------------- | :-------- |
+| `1.x`       | `3.x`         | `6.x`                        | `>=22.17` |
 | `0.5.x`     | `3.x`         | `6.x`                        | `>=22.17` |
 | `0.4.x`     | `2.x`         | `5.x`                        | `>=18`    |
 
 `@sveltejs/adapter-node` is installed as a dependency of this adapter, so there is nothing else to install.
-Being `0.x`, a `^0.4.1` range never resolves to `0.5.0`: SvelteKit 2 projects stay on `0.4.x`.
+From `1.0.0` on the API is stable: a breaking change bumps the major, so `^1.0.0` gets every minor and patch.
+`1.0.0` is `0.5.x` with a stable API (see the CHANGELOG): from `0.5.x`, update the range by hand (`^0.5.0` never resolves to `1.0.0`).
+Being `0.x`, a `^0.4.1` range never resolves to `0.5.0` or `1.0.0`: SvelteKit 2 projects stay on `0.4.x`.
 To install the SvelteKit 2 line explicitly: `npm install -D @opensas/sveltekit-adapter-node-iis@kit2`.
 
 ## ⚙️ Usage
@@ -70,13 +73,13 @@ export default {
 };
 ```
 
-### Migrating from 0.4.x to 0.5.x
+### Migrating from 0.4.x to 0.5.x / 1.x
 
 - Move the adapter from `svelte.config.js` to `vite.config.js` (`npx sv migrate sveltekit-3` does it).
 - adapter-node 6 removed the `ORIGIN` environment variable: set `paths.origin` in the `sveltekit()` options instead,
   or let the origin be derived from the request (`PROTOCOL_HEADER` / `HOST_HEADER`).
   SvelteKit 3 always checks the origin of form submissions (CSRF), so make sure `url.origin` is right behind IIS.
-- The `polyfill` option is ignored (adapter-node 5.5 already ignored it).
+- The `polyfill` option is gone (adapter-node 5.5 already ignored it; `0.5.x` ignored it, `1.0.0` removed it from the types).
 - adapter-node 6 bundles the whole server with rolldown except the `dependencies` of your `package.json`,
   so only those are installed in the output folder when `buildNodeModules` is `true`.
 

@@ -2,6 +2,25 @@
 
 All notable changes to `@opensas/sveltekit-adapter-node-iis` will be documented in this file.
 
+## [1.0.0] - 2026-11-20
+
+Stable API: from now on a breaking change bumps the major, so `^1.0.0` gets every minor and patch
+(with `^0.5.0`, `npm update` never offered `0.6.0`). Same behavior as `0.5.0`, still for SvelteKit 3.
+Projects on `0.5.x` update the range by hand: `^0.5.0` never resolves to `1.0.0`.
+
+### Changed
+
+- **BREAKING:** the deprecated `polyfill` option is removed from the types (it was already ignored).
+  Passing it in a TypeScript config is now a type error; at runtime it is still ignored.
+
+### Added
+
+- `AdapterOptions` is exported, to type the options outside the `adapter()` call.
+
+### Fixed
+
+- Typos in the option docs (`packageManager`, `buildNodeModules`).
+
 ## [0.5.0] - 2026-10-07
 
 SvelteKit 3 support. Use `0.4.x` for SvelteKit 2 (see the compatibility table in the README).
